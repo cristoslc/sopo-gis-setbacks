@@ -21,6 +21,7 @@ import sopo_setbacks as ss
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _ft_to_deg_at(lat: float) -> tuple[float, float]:
     """Approximate degrees per foot at the given latitude. Good enough for
     constructing test fixtures."""
@@ -30,8 +31,13 @@ def _ft_to_deg_at(lat: float) -> tuple[float, float]:
     return deg_per_meter_lon * ft_to_m, deg_per_meter_lat * ft_to_m
 
 
-def _rect_parcel(west_ft: float, south_ft: float, w_ft: float, h_ft: float,
-                 origin=(43.6428, -70.2553)) -> Polygon:
+def _rect_parcel(
+    west_ft: float,
+    south_ft: float,
+    w_ft: float,
+    h_ft: float,
+    origin=(43.6428, -70.2553),
+) -> Polygon:
     """Build a rectangular parcel measured in feet from the origin
     (default: South Portland-ish lat/lon)."""
     lat0, lon0 = origin
@@ -46,6 +52,7 @@ def _rect_parcel(west_ft: float, south_ft: float, w_ft: float, h_ft: float,
 # ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
+
 
 def test_setback_table_loads():
     table = ss.SetbackTable.from_yaml(Path(__file__).parent / "districts.yaml")
@@ -69,7 +76,9 @@ def test_uniform_envelope_shrinks_parcel():
     e_minx, e_miny, e_maxx, e_maxy = env.bounds
 
     tol = 0.2  # meters; UTM scale distortion contributes ~0.1m at this lat
-    assert abs((e_minx - minx) - expected_m) < tol, f"Left inset {e_minx - minx:.3f} != {expected_m:.3f}"
+    assert (
+        abs((e_minx - minx) - expected_m) < tol
+    ), f"Left inset {e_minx - minx:.3f} != {expected_m:.3f}"
     assert abs((maxx - e_maxx) - expected_m) < tol
     assert abs((e_miny - miny) - expected_m) < tol
     assert abs((maxy - e_maxy) - expected_m) < tol
@@ -87,7 +96,9 @@ def test_directional_envelope_no_streets_uses_longest_edge_as_front():
     becomes rear. Left/right become side.
     Expected insets: top/bottom = 25 OR 20 (depending which is front),
     left/right = 10."""
-    parcel_4326 = _rect_parcel(0, 0, 100, 200)  # w=100ft, h=200ft → long sides are vertical
+    parcel_4326 = _rect_parcel(
+        0, 0, 100, 200
+    )  # w=100ft, h=200ft → long sides are vertical
     parcel = ss.project_to_working(parcel_4326)
 
     rules = ss.SetbackRules(front=25, side=10, rear=20)
@@ -105,11 +116,13 @@ def test_directional_envelope_no_streets_uses_longest_edge_as_front():
     expected_front_rear = sorted([20 * ss.FT_TO_M, 25 * ss.FT_TO_M])
 
     tol = 0.2
-    assert all(abs(v - expected_side) < tol for v in horizontal_insets), \
-        f"horizontal (side) insets should be ~{expected_side:.2f}m, got {horizontal_insets}"
+    assert all(
+        abs(v - expected_side) < tol for v in horizontal_insets
+    ), f"horizontal (side) insets should be ~{expected_side:.2f}m, got {horizontal_insets}"
     actual = sorted(vertical_insets)
-    assert all(abs(a - e) < tol for a, e in zip(actual, expected_front_rear)), \
-        f"vertical insets should be ~{expected_front_rear}, got {actual}"
+    assert all(
+        abs(a - e) < tol for a, e in zip(actual, expected_front_rear)
+    ), f"vertical insets should be ~{expected_front_rear}, got {actual}"
     print("✓ directional_envelope (no streets) classifies edges correctly")
 
 
@@ -122,10 +135,12 @@ def test_directional_envelope_with_streets():
 
     # Street running E-W just below the parcel, in WGS84
     south_y = parcel_4326.bounds[1] - 1e-5
-    street_4326 = LineString([
-        (parcel_4326.bounds[0] - 1e-4, south_y),
-        (parcel_4326.bounds[2] + 1e-4, south_y),
-    ])
+    street_4326 = LineString(
+        [
+            (parcel_4326.bounds[0] - 1e-4, south_y),
+            (parcel_4326.bounds[2] + 1e-4, south_y),
+        ]
+    )
     street = ss.project_to_working(street_4326)
 
     rules = ss.SetbackRules(front=25, side=10, rear=20)
@@ -136,9 +151,13 @@ def test_directional_envelope_with_streets():
 
     tol = 0.2
     # Bottom = front = 25 ft inset
-    assert abs((e_miny - miny) - 25 * ss.FT_TO_M) < tol, f"bottom inset {e_miny - miny:.3f}"
+    assert (
+        abs((e_miny - miny) - 25 * ss.FT_TO_M) < tol
+    ), f"bottom inset {e_miny - miny:.3f}"
     # Top = rear = 20 ft inset
-    assert abs((maxy - e_maxy) - 20 * ss.FT_TO_M) < tol, f"top inset {maxy - e_maxy:.3f}"
+    assert (
+        abs((maxy - e_maxy) - 20 * ss.FT_TO_M) < tol
+    ), f"top inset {maxy - e_maxy:.3f}"
     # Sides = 10 ft inset
     assert abs((e_minx - minx) - 10 * ss.FT_TO_M) < tol
     assert abs((maxx - e_maxx) - 10 * ss.FT_TO_M) < tol
@@ -237,20 +256,28 @@ def test_cli_writes_files():
 
         parcels_fc = {
             "type": "FeatureCollection",
-            "features": [{
-                "type": "Feature",
-                "properties": {"id": "X", "zoning": "G"},
-                "geometry": mapping(_rect_parcel(0, 0, 100, 100)),
-            }],
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {"id": "X", "zoning": "G"},
+                    "geometry": mapping(_rect_parcel(0, 0, 100, 100)),
+                }
+            ],
         }
         parcels_path.write_text(json.dumps(parcels_fc))
 
-        rc = ss._main([
-            "--parcels", str(parcels_path),
-            "--rules", str(Path(__file__).parent / "districts.yaml"),
-            "--out-envelopes", str(env_path),
-            "--out-strips", str(strip_path),
-        ])
+        rc = ss._main(
+            [
+                "--parcels",
+                str(parcels_path),
+                "--rules",
+                str(Path(__file__).parent / "districts.yaml"),
+                "--out-envelopes",
+                str(env_path),
+                "--out-strips",
+                str(strip_path),
+            ]
+        )
         assert rc == 0
         assert env_path.exists()
         assert strip_path.exists()

@@ -33,7 +33,7 @@ import argparse
 import json
 import logging
 import sys
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, Optional
 
@@ -62,6 +62,7 @@ FT_TO_M = 0.3048
 # ---------------------------------------------------------------------------
 # Rules
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class SetbackRules:
@@ -137,6 +138,7 @@ def project_to_input(geom: BaseGeometry) -> BaseGeometry:
 # ---------------------------------------------------------------------------
 # Geometry: setback envelope computation
 # ---------------------------------------------------------------------------
+
 
 def uniform_envelope(parcel: Polygon, rules: SetbackRules) -> BaseGeometry:
     """
@@ -226,7 +228,9 @@ def _classify_edges(
         front_idxs = [
             min(
                 range(len(edges)),
-                key=lambda i: edges[i].interpolate(0.5, normalized=True).distance(streets),
+                key=lambda i: edges[i]
+                .interpolate(0.5, normalized=True)
+                .distance(streets),
             )
         ]
         classes[front_idxs[0]] = "front"
@@ -235,9 +239,11 @@ def _classify_edges(
     # perpendicular distance from any front edge's line of support.
     non_front = [i for i in range(len(edges)) if i not in front_idxs]
     if non_front:
+
         def perp_to_any_front(idx: int) -> float:
             mid = edges[idx].interpolate(0.5, normalized=True)
             return max(_perp_distance_to_line(mid, edges[fi]) for fi in front_idxs)
+
         rear_idx = max(non_front, key=perp_to_any_front)
         classes[rear_idx] = "rear"
 
@@ -285,9 +291,7 @@ def directional_envelope(
     return envelope
 
 
-def setback_strips(
-    parcel: Polygon, envelope: BaseGeometry
-) -> BaseGeometry:
+def setback_strips(parcel: Polygon, envelope: BaseGeometry) -> BaseGeometry:
     """The no-build region = parcel minus envelope. Useful as an overlay layer."""
     return parcel.difference(envelope)
 
@@ -295,6 +299,7 @@ def setback_strips(
 # ---------------------------------------------------------------------------
 # Top-level orchestrator
 # ---------------------------------------------------------------------------
+
 
 def _as_polygons(g: BaseGeometry) -> Iterable[Polygon]:
     if isinstance(g, Polygon):
@@ -358,17 +363,21 @@ def build_overlay(
             }
 
             if not env.is_empty:
-                env_features.append({
-                    "type": "Feature",
-                    "properties": {**base_props, "kind": "envelope"},
-                    "geometry": mapping(project_to_input(env)),
-                })
+                env_features.append(
+                    {
+                        "type": "Feature",
+                        "properties": {**base_props, "kind": "envelope"},
+                        "geometry": mapping(project_to_input(env)),
+                    }
+                )
             if not strip.is_empty:
-                strip_features.append({
-                    "type": "Feature",
-                    "properties": {**base_props, "kind": "setback"},
-                    "geometry": mapping(project_to_input(strip)),
-                })
+                strip_features.append(
+                    {
+                        "type": "Feature",
+                        "properties": {**base_props, "kind": "setback"},
+                        "geometry": mapping(project_to_input(strip)),
+                    }
+                )
 
     if skipped:
         log.warning("Skipped %d parcels with unknown districts", skipped)
@@ -382,6 +391,7 @@ def build_overlay(
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
+
 
 def _main(argv: Optional[list[str]] = None) -> int:
     p = argparse.ArgumentParser(description="Build SoPo zoning setbacks overlay")
@@ -405,7 +415,9 @@ def _main(argv: Optional[list[str]] = None) -> int:
     streets = json.loads(args.streets.read_text()) if args.streets else None
 
     env_fc, strip_fc = build_overlay(
-        parcels, table, streets,
+        parcels,
+        table,
+        streets,
         zoning_field=args.zoning_field,
         parcel_id_field=args.parcel_id_field,
     )
@@ -414,8 +426,10 @@ def _main(argv: Optional[list[str]] = None) -> int:
     args.out_strips.write_text(json.dumps(strip_fc))
     log.info(
         "Wrote %d envelopes -> %s, %d strips -> %s",
-        len(env_fc["features"]), args.out_envelopes,
-        len(strip_fc["features"]), args.out_strips,
+        len(env_fc["features"]),
+        args.out_envelopes,
+        len(strip_fc["features"]),
+        args.out_strips,
     )
     return 0
 
