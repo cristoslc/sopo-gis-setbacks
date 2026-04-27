@@ -21,7 +21,7 @@ freshness-ttl:
 history:
   - event: created
     date: 2026-04-27
-    commit: "--"
+    commit: 033a17c
     sources: 5
     notes: "Initial trove covering SoPo GIS portals, zoning ordinance, AxisGIS viewer, and local RESOURCES.md reference"
 
