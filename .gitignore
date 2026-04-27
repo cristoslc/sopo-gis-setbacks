@@ -1,0 +1,171 @@
+# ─── Python ───
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Django / Flask
+*.log
+local_settings.py
+instance/
+.webassets-cache
+
+# Scrapy
+.scrapy
+
+# Sphinx
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter
+.ipynb_checkpoints
+
+# PyCharm / VSCode
+.idea/
+.vscode/
+*.swp
+*~
+
+# PEP 582
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath
+*.sage.py
+
+# Environments
+.env
+.env.local
+.env.*.local
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder / Rope
+.spyderproject
+.spyproject
+.ropeproject
+
+# mkdocs
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre
+.pyre/
+
+# pytype
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# ─── GIS / Data ───
+*.geojson
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.sbn
+*.sbx
+*.shp.xml
+*.gdb/
+*.mdb
+*.gpkg
+*.kml
+*.kmz
+*.tif
+*.tiff
+*.img
+*.asc
+*.las
+*.laz
+*.csv
+*.xlsx
+*.xls
+
+# Keep source rules table
+districts.yaml
+
+# ─── OS ───
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── Logs & Temp ───
+*.log
+*.tmp
+tmp/
+temp/
+
+# ─── Secrets ───
+*.pem
+*.p12
+*.key
+*.crt
+*.cer
+id_rsa
+id_rsa.pub
+id_dsa
+id_ecdsa
+id_ed25519
+known_hosts
+.ssh/
+.aws/
+azure*.json
+*_token*
+*_secret*
+*password*
+*apikey*
+*api_key*

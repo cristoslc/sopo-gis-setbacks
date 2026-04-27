@@ -1,0 +1,83 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+
+minimum_pre_commit_version: '3.0'
+
+default_stages: [pre-commit]
+
+repos:
+  # --- Meta ---
+  - repo: meta
+    hooks:
+      - id: check-hooks-apply
+      - id: check-useless-excludes
+
+  # --- General ---
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      # Big files
+      - id: check-added-large-files
+        args: ['--maxkb=500']
+      # File endings
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-json
+      - id: check-toml
+      - id: check-xml
+      - id: check-yaml
+        args: ['--allow-multiple-documents']
+      # Cross-platform
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+      # Security
+      - id: detect-private-key
+      - id: detect-aws-credentials
+        args: ['--allow-missing-credentials']
+
+  # --- PII blocker (personal) ---
+  - repo: local
+    hooks:
+      - id: check-pii
+        name: Check for personal PII in source/docs
+        entry: python scripts/check_pii.py
+        language: system
+        # Run on all text files inside the repo, but NOT on raw dataset files
+        types: [text]
+        exclude: >
+          (?x)^(
+            .*\.geojson$
+            |.*\.csv$
+            |.*\.shp$
+            |.*\.xlsx?$
+            |\.gitignore$
+            |\.pre-commit-config\.yaml$
+            |LICEN[CS]E.*$
+          )
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: test_.*\.py
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      - id: gitleaks
+
+  # --- Python ---
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.2
+    hooks:
+      - id: ruff
+        args: ['--fix']
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.0
+    hooks:
+      - id: mypy
+        additional_dependencies: [types-PyYAML]
+        files: sopo_setbacks\.py
