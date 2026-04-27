@@ -66,6 +66,7 @@ repos:
     rev: v8.18.4
     hooks:
       - id: gitleaks
+        exclude: .secrets.baseline
 
   # --- Python ---
   - repo: https://github.com/astral-sh/ruff-pre-commit
