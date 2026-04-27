@@ -1,5 +1,12 @@
 # sopo-setbacks
 
+> **Status: IN-PROGRESS — NOT YET WORKING.**
+> This repository contains an early-stage experiment. The districts table is
+> incomplete, several zoning rules are not yet modeled, and outputs should
+> **not** be relied on for any permit, legal review, or property
+> transaction until the remaining TODOs are resolved and the seed values are
+> cross-checked against the current ordinance.
+
 Build a zoning-setback overlay layer for South Portland, ME from parcel
 geometry + Chapter 27 dimensional rules.
 
