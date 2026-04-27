@@ -1,0 +1,93 @@
+# South Portland, ME — zoning setbacks (seed table)
+#
+# All distances in FEET. Source: City Code Chapter 27 (Zoning).
+# Each district lists the *principal building* setbacks. Accessory-building
+# setbacks, height-driven adjustments (e.g. "50% of building height" rules),
+# corner-lot Secondary Front Yard rules, and the Shoreland Overlay are NOT
+# modeled here yet — see README "Known limitations".
+#
+# This is a SEED, not a complete table. Add districts as you transcribe them.
+# Every entry should cite the section it came from for auditability.
+#
+# Schema per district:
+#   front:        ft, principal building front yard
+#   side:         ft, principal building side yard (smaller of the two if asymmetric)
+#   rear:         ft, principal building rear yard
+#   accessory_side: ft, accessory building side yard (optional)
+#   accessory_rear: ft, accessory building rear yard (optional)
+#   notes:        free text, especially for conditional rules
+#   source:       citation (Sec. 27-xxx)
+#   verified:     YYYY-MM-DD when you last cross-checked the ordinance
+
+districts:
+
+  G:
+    front: 20
+    side: 8           # PLACEHOLDER — Sec. 27-554 needs verification
+    rear: 25          # PLACEHOLDER
+    accessory_side: 6
+    accessory_rear: 6
+    notes: |
+      Single-family <= 30ft height: side yard may be 6 ft.
+      Buildings > 30 ft: side & rear >= 50% of building height.
+    source: "Sec. 27-554 (Space and bulk regulations, G)"
+    verified: null
+
+  C:
+    front: 15
+    side: 0           # except 15 ft when abutting residential district
+    rear: 0           # except 15 ft when abutting residential district
+    notes: |
+      Side/rear: none required EXCEPT 15 ft (or 50% of building height,
+      whichever is greater) when abutting a residential district. Telecom
+      tower setbacks = 100% of tower height. Shoreland Area Overlay applies
+      separately.
+    source: "Sec. 27-78x (Commercial District C)"
+    verified: 2026-04-27
+
+  VC:
+    front: 0          # village commercial — no minimum, building must fill 80% of primary frontage
+    side: 0           # except 6 ft where abutting VR
+    rear: 6           # except 15 ft where abutting VR
+    notes: |
+      Building must fill >= 80% of primary street frontage.
+      Side/rear setbacks increase when abutting Village Residential (VR).
+    source: "Knightville/Mill Creek zoning amendments (Sec. 27-71x area)"
+    verified: null
+
+  VE:
+    front: 0
+    side: 0           # except 15 ft where abutting residential
+    rear: 0           # except greater of 15 ft or 50% of building height where abutting residential
+    notes: |
+      Village Extension. Frontage utilization rule applies (>= 80% of
+      primary frontage except along Broadway).
+    source: "Sec. 27-811 et seq. (Village Extension VE)"
+    verified: null
+
+  # ---- TODO: transcribe from ordinance ----
+  # Add the following districts. The Wardley-mapping habit applies here too:
+  # do the most-used residential districts first (A, AA, G-2..G-6), then
+  # commercial, then specialty/contract zones.
+  #
+  # A:  Sec. 27-534
+  # AA: Sec. 27-524
+  # G-2..G-6: Sec. 27-1064 et seq. (and conditional zones)
+  # LB: Sec. 27-704
+  # SP: Sec. 27-732
+  # CS: Sec. 27-739
+  # I:  Industrial districts
+  # SH: Shoreland overlay (this is an OVERLAY, not a base district — applied
+  #     on top via shoreland_overlay rules, see README)
+
+# Optional fallbacks. If a parcel has a district code not in the table,
+# decide what to do:
+#   strict:  raise an error
+#   lenient: skip the parcel (with a warning)
+#   conservative: apply the worst-case setback below
+unknown_district:
+  policy: lenient
+  conservative_fallback:
+    front: 25
+    side: 15
+    rear: 25
