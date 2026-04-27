@@ -1,0 +1,67 @@
+trove: sopo-gis-sources
+created: 2026-04-27
+refreshed: 2026-04-27
+tags:
+  - south-portland
+  - gis
+  - zoning
+  - setbacks
+  - maine
+  - arcgis
+  - parcel-data
+  - hub
+  - axisgis
+  - ordinance
+
+freshness-ttl:
+  web: 14d
+  local: never
+  document: 30d
+
+history:
+  - event: created
+    date: 2026-04-27
+    commit: "--"
+    sources: 5
+    notes: "Initial trove covering SoPo GIS portals, zoning ordinance, AxisGIS viewer, and local RESOURCES.md reference"
+
+sources:
+  - source-id: sopo-hub-parcels
+    type: web
+    url: "https://city-of-south-portland-southportland.hub.arcgis.com/datasets/parcels-for-download"
+    fetched: 2026-04-27T19:45:00Z
+    title: "Parcels for download | City of South Portland"
+    hash: "d45b08ce119330ce99841ee9add83e808e5f67c971245feedd16bd778c673d8e"
+    notes: "Hub item page browsed; REST directory returned Invalid URL for direct JSON queries"
+
+  - source-id: sopo-axisgis-viewer
+    type: web
+    url: "https://www.axisgis.com/South_PortlandME/"
+    fetched: 2026-04-27T19:50:00Z
+    title: "AxisGIS - South_PortlandME"
+    hash: "df14db925834a39df31eb06e5ef3d1bdd2a6134b61061c60e802b258fca5d439"
+    notes: "Hosted viewer text captured; viewer is read-only (no direct bulk download)"
+
+  - source-id: sopo-zoning-ordinance
+    type: document
+    url: "https://southportland.gov/DocumentCenter/View/1510/CH-27--Zoning-with-New-TOC-format"
+    fetched: 2026-04-27T19:55:00Z
+    title: "South Portland Code — Chapter 27 (Zoning Ordinance)"
+    hash: "be5cefbebdc53d004ceaafcf007eca6b0d2f559ac6b8da95e8bb8f497ff52572"
+    notes: "PDF not downloaded; metadata compiled from search snippets and RESOURCES.md cross-reference"
+
+  - source-id: megeolibrary-legacy
+    type: web
+    url: "https://www.maine.gov/megis/catalog/"
+    fetched: 2026-04-27T19:55:00Z
+    title: "Maine Office of GIS (MEGIS) — Legacy Catalog"
+    hash: "6b1a151b52791a9190260fc81918d0c80fca5286c4f56937108ca51183d75144"
+    notes: "Legacy catalog page confirmed obsolete; superseded by Maine GeoLibrary Hub"
+
+  - source-id: sopo-resources-main
+    type: local
+    path: "RESOURCES.md"
+    fetched: 2026-04-27T19:57:00Z
+    title: "Resources — South Portland, ME GIS & Zoning Data"
+    hash: "d331aac97f6efd8dd0ccb87c2ac65abce250f0e281c4b2b38384310c2c3e16b6"
+    notes: "Project-maintained reference list; cross-checked against live URLs"
