@@ -1,0 +1,76 @@
+trove: self-hosted-gis-web-ui
+created: 2026-04-29
+refreshed: 2026-04-29
+tags:
+  - gis
+  - web-map
+  - self-hosted
+  - docker
+  - docker-compose
+  - geoserver
+  - postgis
+  - maplibre
+  - leaflet
+  - tile-server
+  - qgis-alternative
+  - viewer
+
+freshness-ttl:
+  web: 14d
+  forum: 7d
+
+history:
+  - event: created
+    date: 2026-04-29
+    commit: "--"
+    sources: 6
+    notes: "Survey of self-hosted Docker-based GIS web UI options as QGIS alternatives"
+
+sources:
+  - source-id: lizmap-docker-compose
+    type: web
+    url: "https://github.com/3liz/lizmap-docker-compose"
+    fetched: 2026-04-29T12:00:00Z
+    title: "Lizmap Stack with Docker Compose"
+    hash: "b31a0bb8c306ae1398af743f58f5934b0b3fe6dea1d68877a35376f3cbc79fed"  # pragma: allowlist secret
+    notes: "Docker Compose stack for Lizmap web UI with QGIS Server; requires QGIS Desktop for project preparation"
+
+  - source-id: geonode-platform
+    type: web
+    url: "https://github.com/GeoNode/geonode"
+    fetched: 2026-04-29T12:00:00Z
+    title: "GeoNode — Geospatial Content Management System"
+    hash: "2d46445e041935fde36d0aa33213f4cbae75272356bd84dad8970f219bed5b8d"  # pragma: allowlist secret
+    notes: "Full SDI platform; 1.7k stars, v5.0.2; heavy Docker stack (~8 containers); overkill for simple map viewing but capable of self-service upload+view"
+
+  - source-id: kartoza-geoserver-docker
+    type: web
+    url: "https://github.com/kartoza/docker-geoserver"
+    fetched: 2026-04-29T12:00:00Z
+    title: "Kartoza docker-geoserver — Production GeoServer Docker Image"
+    hash: "82e55ee67ed961788925303a181c1d89a1abacbae1b56f4275c3d0969fb5ec41"  # pragma: allowlist secret
+    notes: "Production GeoServer Docker image (706 stars, v2.28.3). Built-in web admin UI with Layer Preview (OpenLayers viewer per layer)"
+
+  - source-id: pg-tileserv-pg-featureserv
+    type: web
+    url: "https://github.com/CrunchyData/pg_tileserv"
+    fetched: 2026-04-29T12:00:00Z
+    title: "pg_tileserv + pg_featureserv — Lightweight PostGIS Tile & Feature Servers"
+    hash: "62020d442b9d101b16d061402f2725b087ec845a2ba058380a2742ac881243e9"  # pragma: allowlist secret
+    notes: "Two Go servers (1k + 532 stars). pg_tileserv serves vector tiles; pg_featureserv implements OGC API - Features with built-in HTML web map viewer. Much lighter than GeoServer."
+
+  - source-id: selfhosted-reddit-thread
+    type: forum
+    url: "https://www.reddit.com/r/selfhosted/comments/hegowt/self_hosted_maps_instance/"
+    fetched: 2026-04-29T12:00:00Z
+    title: "r/selfhosted: Self Hosted Maps Instance"
+    hash: "07bc399ae6c01a12516081e0a3d58348c9c445e91b57e6fdfcaa2ae0ab947d4a"  # pragma: allowlist secret
+    notes: "Community recommendations: Lizmap as top suggestion, GeoServer/GeoNode as alternatives. Consensus that GIS has a learning curve but Docker helps."
+
+  - source-id: maplibre-leaflet-frontend
+    type: web
+    url: "https://maplibre.org/"
+    fetched: 2026-04-29T12:00:00Z
+    title: "MapLibre GL JS and Leaflet — Browser-based Map Frontends"
+    hash: "3065e007e45e36ba70e2fe5809daaa268c1d1055e0370126c772afc4ac90f503"  # pragma: allowlist secret
+    notes: "Frontend libraries for composing self-hosted map viewers. Pattern: tile server + static HTML page with MapLibre/Leaflet, all Dockerized."
