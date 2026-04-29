@@ -22,7 +22,7 @@ freshness-ttl:
 history:
   - event: created
     date: 2026-04-29
-    commit: "--"
+    commit: d97c72e
     sources: 6
     notes: "Survey of self-hosted Docker-based GIS web UI options as QGIS alternatives"
 
