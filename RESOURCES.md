@@ -51,6 +51,8 @@ verifying, and extending the `sopo-setbacks` overlay.
 - **Zoning district polygons** — Available from the city's ArcGIS Server. Useful for visual validation and for future features such as "abutting residential district" conditional rules.
   - MapServer (layer 0): `https://arcweb.southportland.org/arcgis/rest/services/Planning/ZoningPublish/MapServer/0`
   - Viewer app: <https://www.arcgis.com/apps/webappviewer/index.html?id=3c82c619da2f4d02ae3960adab2db764>
+- **Building footprints** — City-maintained polygon layer of all structures. Used to overlay with setback envelopes to visualize buildable area.
+  - FeatureServer (layer 0): `https://services5.arcgis.com/OpN4013XQ19WlWn4/arcgis/rest/services/Building_Footprints_Public_View/FeatureServer/0`
 - **Aerial imagery** — Available in both AxisGIS and ArcGIS Online. Useful for ground-truthing irregular parcels and shoreland boundaries.
 
 ## Tips for Contributors

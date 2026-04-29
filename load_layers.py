@@ -51,6 +51,32 @@ LAYER_CONFIGS = [
         "outline_width": 0.8,
         "is_line": True,
     },
+    {
+        "file": "building_footprints.geojson",
+        "name": "Buildings",
+        "provider": "ogr",
+        "color": "#cc3333",
+        "fill_alpha": 180,
+        "outline_width": 0.3,
+    },
+    {
+        "file": os.path.join(SCRIPT_DIR, "output/envelopes.geojson"),
+        "name": "Buildable Envelopes",
+        "provider": "ogr",
+        "color": "#33cc33",
+        "fill_alpha": 60,
+        "outline_width": 0.6,
+        "abs_path": True,
+    },
+    {
+        "file": os.path.join(SCRIPT_DIR, "output/setback_strips.geojson"),
+        "name": "Setback Strips",
+        "provider": "ogr",
+        "color": "#cc3333",
+        "fill_alpha": 40,
+        "outline_width": 0.4,
+        "abs_path": True,
+    },
 ]
 
 
@@ -135,7 +161,10 @@ def load_standalone():
     project.setCrs(crs)
 
     for config in LAYER_CONFIGS:
-        path = os.path.join(DATA_DIR, config["file"])
+        if config.get("abs_path"):
+            path = config["file"]
+        else:
+            path = os.path.join(DATA_DIR, config["file"])
         if not os.path.exists(path):
             print(f"SKIP: {path} not found")
             continue
